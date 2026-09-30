@@ -59,6 +59,8 @@ function normalizeText(value) {
 }
 
 function renderResults(keyword = '') {
+    if (!resultsContainer) return;
+
     const query = normalizeText(keyword);
     const filteredResults = query
         ? travelData.filter((item) => {
@@ -85,14 +87,20 @@ function renderResults(keyword = '') {
         .join('');
 }
 
-searchForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    renderResults(searchInput.value);
-});
+if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        renderResults(searchInput.value);
+    });
+}
 
-clearButton.addEventListener('click', () => {
-    searchInput.value = '';
-    renderResults('');
-});
+if (clearButton && searchInput) {
+    clearButton.addEventListener('click', () => {
+        searchInput.value = '';
+        renderResults('');
+    });
+}
 
-renderResults();
+if (resultsContainer) {
+    renderResults();
+}
