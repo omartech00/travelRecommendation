@@ -118,6 +118,16 @@ function flattenTravelData(data) {
     return flattened;
 }
 
+function clearResults() {
+    if (searchInput) {
+        searchInput.value = '';
+    }
+
+    if (resultsContainer) {
+        resultsContainer.innerHTML = '';
+    }
+}
+
 function renderResults(keyword = '') {
     if (!resultsContainer) return;
 
@@ -153,8 +163,7 @@ if (searchForm && searchInput) {
 
 if (clearButton && searchInput) {
     clearButton.addEventListener('click', () => {
-        searchInput.value = '';
-        resultsContainer.innerHTML = '';
+        clearResults();
     });
 }
 
