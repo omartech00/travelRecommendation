@@ -57,7 +57,26 @@ const searchInput = document.getElementById('search-input');
 const clearButton = document.getElementById('clear-search');
 
 function normalizeText(value) {
-    return value.trim().toLowerCase();
+    return String(value || '').trim().toLowerCase();
+}
+
+function matchesKeyword(item, query) {
+    const text = `${item.name} ${item.category} ${item.description}`.toLowerCase();
+    const normalizedQuery = normalizeText(query);
+
+    if (!normalizedQuery) return true;
+
+    const categoryAliases = {
+        beach: ['beach', 'beaches'],
+        temple: ['temple', 'temples'],
+        country: ['country', 'countries']
+    };
+
+    const categoryMatches = categoryAliases[item.category]
+        ? categoryAliases[item.category].some((keyword) => normalizedQuery.includes(keyword))
+        : false;
+
+    return text.includes(normalizedQuery) || categoryMatches;
 }
 
 function flattenTravelData(data) {
@@ -104,10 +123,7 @@ function renderResults(keyword = '') {
 
     const query = normalizeText(keyword);
     const filteredResults = query
-        ? travelData.filter((item) => {
-            const entryText = `${item.name} ${item.category} ${item.description}`.toLowerCase();
-            return entryText.includes(query);
-        })
+        ? travelData.filter((item) => matchesKeyword(item, query))
         : travelData;
 
     if (!filteredResults.length) {
@@ -138,7 +154,7 @@ if (searchForm && searchInput) {
 if (clearButton && searchInput) {
     clearButton.addEventListener('click', () => {
         searchInput.value = '';
-        renderResults('');
+        resultsContainer.innerHTML = '';
     });
 }
 
@@ -156,12 +172,12 @@ fetch('travel_recommendation_api.json')
             travelData = normalizedData;
         }
         if (resultsContainer) {
-            renderResults();
+            resultsContainer.innerHTML = '';
         }
     })
     .catch((error) => {
         console.error('Failed to load travel data:', error);
         if (resultsContainer) {
-            renderResults();
+            resultsContainer.innerHTML = '<div class="no-results">Unable to load travel recommendations.</div>';
         }
     });
