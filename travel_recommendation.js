@@ -1,4 +1,4 @@
-const travelData = [
+const fallbackData = [
     {
         name: 'Sydney, Australia',
         category: 'country',
@@ -49,6 +49,8 @@ const travelData = [
     }
 ];
 
+let travelData = [...fallbackData];
+
 const resultsContainer = document.getElementById('results');
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
@@ -56,6 +58,45 @@ const clearButton = document.getElementById('clear-search');
 
 function normalizeText(value) {
     return value.trim().toLowerCase();
+}
+
+function flattenTravelData(data) {
+    const flattened = [];
+
+    if (!data) return flattened;
+
+    const sections = [
+        { key: 'countries', category: 'country' },
+        { key: 'temples', category: 'temple' },
+        { key: 'beaches', category: 'beach' }
+    ];
+
+    sections.forEach(({ key, category }) => {
+        const items = data[key] || [];
+
+        items.forEach((entry) => {
+            if (Array.isArray(entry.cities)) {
+                entry.cities.forEach((city) => {
+                    flattened.push({
+                        name: city.name,
+                        category,
+                        description: city.description,
+                        imageUrl: city.imageUrl
+                    });
+                });
+                return;
+            }
+
+            flattened.push({
+                name: entry.name,
+                category,
+                description: entry.description,
+                imageUrl: entry.imageUrl
+            });
+        });
+    });
+
+    return flattened;
 }
 
 function renderResults(keyword = '') {
@@ -101,6 +142,26 @@ if (clearButton && searchInput) {
     });
 }
 
-if (resultsContainer) {
-    renderResults();
-}
+fetch('travel_recommendation_api.json')
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        console.log('Fetched travel data:', data);
+        const normalizedData = flattenTravelData(data);
+        if (normalizedData.length) {
+            travelData = normalizedData;
+        }
+        if (resultsContainer) {
+            renderResults();
+        }
+    })
+    .catch((error) => {
+        console.error('Failed to load travel data:', error);
+        if (resultsContainer) {
+            renderResults();
+        }
+    });
