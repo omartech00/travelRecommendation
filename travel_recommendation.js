@@ -128,6 +128,38 @@ function clearResults() {
     }
 }
 
+function getCountryTimeZone(countryName) {
+    const timeZones = {
+        'Australia': 'Australia/Sydney',
+        'Japan': 'Asia/Tokyo',
+        'Brazil': 'America/Sao_Paulo',
+        'India': 'Asia/Kolkata',
+        'Cambodia': 'Asia/Phnom_Penh',
+        'France': 'Europe/Paris',
+        'French Polynesia': 'Pacific/Tahiti'
+    };
+
+    const country = countryName.split(',').pop()?.trim();
+    return timeZones[country] || 'UTC';
+}
+
+function getLocalTimeForLocation(locationName) {
+    const timeZone = getCountryTimeZone(locationName);
+    const options = {
+        timeZone,
+        hour12: true,
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
+
+    try {
+        return new Date().toLocaleTimeString('en-US', options);
+    } catch (error) {
+        return 'Time unavailable';
+    }
+}
+
 function renderResults(keyword = '') {
     if (!resultsContainer) return;
 
@@ -142,15 +174,17 @@ function renderResults(keyword = '') {
     }
 
     resultsContainer.innerHTML = filteredResults
-        .map(
-            (item) => `
+        .map((item) => {
+            const timeString = getLocalTimeForLocation(item.name);
+            return `
                 <article class="result-card">
                     <img src="${item.imageUrl}" alt="${item.name}">
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
+                    <p class="country-time">Current time: ${timeString}</p>
                 </article>
-            `
-        )
+            `;
+        })
         .join('');
 }
 

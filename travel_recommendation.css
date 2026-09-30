@@ -534,6 +534,13 @@ input {
     font-size: 0.95rem;
 }
 
+.country-time {
+    margin-top: -4px;
+    font-size: 0.8rem;
+    color: #0d7f75;
+    font-weight: 700;
+}
+
 .no-results {
     padding: 24px;
     background: #fff;
