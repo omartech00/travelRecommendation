@@ -7,6 +7,11 @@
 
 body {
     background: #dfe6e9;
+    background-image: linear-gradient(rgba(8, 36, 46, 0.18), rgba(8, 36, 46, 0.18)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #ffffff;
 }
 
@@ -23,10 +28,16 @@ input {
 .page-shell {
     width: min(100%, 1460px);
     margin: 0 auto;
-    padding: 0 0 40px;
+    padding: 72px 0 40px;
+    position: relative;
 }
 
 .topbar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, 1460px);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,6 +50,7 @@ input {
     border: 3px solid rgba(255, 255, 255, 0.25);
     border-bottom: none;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    z-index: 1000;
 }
 
 .brand {
@@ -140,9 +152,7 @@ input {
 .hero {
     position: relative;
     min-height: 660px;
-    background-image: linear-gradient(rgba(8, 36, 46, 0.16), rgba(8, 36, 46, 0.16)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80');
-    background-position: center;
-    background-size: cover;
+    background: transparent;
     border: 2px solid rgba(255,255,255,0.15);
     border-top: none;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
@@ -250,9 +260,7 @@ input {
 }
 
 .about-section {
-    background-image: linear-gradient(rgba(9, 38, 50, 0.35), rgba(9, 38, 50, 0.35)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80');
-    background-size: cover;
-    background-position: center;
+    background: rgba(9, 38, 50, 0.22);
     padding: 30px 26px 36px;
     margin-top: 0;
 }
@@ -363,9 +371,7 @@ input {
 .contact-section {
     position: relative;
     min-height: 620px;
-    background-image: linear-gradient(rgba(7, 37, 46, 0.18), rgba(7, 37, 46, 0.18)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80');
-    background-size: cover;
-    background-position: center;
+    background: rgba(7, 37, 46, 0.10);
     padding: 18px 24px 24px;
     display: flex;
     align-items: center;
